@@ -19,6 +19,10 @@ public class _2025Code1 extends OpMode {
   private DcMotor front_left;
   private DcMotor back_right;
   private DcMotor front_right;
+
+  DcMotor flywheel1;
+
+  DcMotor flywheel2;
   boolean speedtoggle;
   double WheelSpeedDivisor;
   int mode;
@@ -91,6 +95,11 @@ public class _2025Code1 extends OpMode {
       gamepad1.rumble(1, 0, 676);
       WheelSpeedDivisor = 2;
     }
+
+    flywheel1.setPower(gamepad1.right_trigger * -1);
+    flywheel2.setPower(gamepad1.right_trigger * -1);
+
+
     telemetry.update();
   }
 }
