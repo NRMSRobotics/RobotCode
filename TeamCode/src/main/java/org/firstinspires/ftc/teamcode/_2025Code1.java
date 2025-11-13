@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@TeleOp(name = "_2025Code1 (Blocks to Java)")
+@TeleOp(name = "_2025Code1")
 public class _2025Code1 extends LinearOpMode {
 
   private DcMotor back_left;
