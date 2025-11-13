@@ -78,7 +78,7 @@ public class _2025Code1 extends LinearOpMode {
             WheelSpeedDivisor = 2;
           }
 
-          flywheel1.setPower(gamepad1.right_trigger * -1);
+          flywheel1.setPower(gamepad1.right_trigger);
           flywheel2.setPower(gamepad1.right_trigger * -1);
 
           telemetry.update();
