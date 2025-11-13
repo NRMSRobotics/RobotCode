@@ -15,10 +15,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 @TeleOp(name = "_2025Code1")
 public class _2025Code1 extends OpMode {
   GoBildaPinpointDriver odo;
-  private DcMotor back_left;
-  private DcMotor front_left;
-  private DcMotor back_right;
-  private DcMotor front_right;
+  DcMotor back_left;
+  DcMotor front_left;
+  DcMotor back_right;
+  DcMotor front_right;
   boolean speedtoggle;
   double WheelSpeedDivisor;
   int mode;
@@ -28,6 +28,11 @@ public class _2025Code1 extends OpMode {
 
   @Override
   public void init() {
+    front_left = hardwareMap.get(DcMotor.class, "front_left");
+    front_right = hardwareMap.get(DcMotor.class, "front_right");
+    back_left = hardwareMap.get(DcMotor.class, "back_left");
+    back_right = hardwareMap.get(DcMotor.class, "back_right");
+
     odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
     speedtoggle = true;
     WheelSpeedDivisor = 1.15;
@@ -78,7 +83,7 @@ public class _2025Code1 extends OpMode {
     Pose2D pos = odo.getPosition();
     //Extra Features, note that these are still in testing and probably include a bunch of bugs.
     if (gamepad1.x && gamepad1.y) {
-      // Killswitch
+      //Killswitch
       terminateOpModeNow();
     }
     if (gamepad1.dpad_up && WheelSpeedDivisor == 2) {
