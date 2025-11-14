@@ -19,7 +19,7 @@ public class _2025Code1 extends OpMode {
   private DcMotor flywheel1;
   private DcMotor flywheel2;
 
-  boolean speedtoggle;
+  boolean imuInit;
   double wheelSpeedDivisor;
   int mode;
   float vertical;
@@ -45,7 +45,7 @@ public class _2025Code1 extends OpMode {
     back_right = hardwareMap.get(DcMotor.class, "back_right");
     front_right = hardwareMap.get(DcMotor.class, "front_right");
 
-    speedtoggle = true;
+    imuInit = false;
     wheelSpeedDivisor = 1.15;
     mode = 0;
     back_left.setDirection(DcMotor.Direction.REVERSE);
@@ -65,18 +65,26 @@ public class _2025Code1 extends OpMode {
     double adjustedStrafe = -forward * Math.sin(heading) + strafe * Math.cos(heading);
     double adjustedForward = forward * Math.cos(heading) + strafe * Math.sin(heading);
 
-    front_left.setPower((adjustedForward + adjustedStrafe + rotate) / wheelSpeedDivisor);
-    front_right.setPower((adjustedForward - adjustedStrafe - rotate) / wheelSpeedDivisor);
-    back_left.setPower((adjustedForward - adjustedStrafe + rotate) / wheelSpeedDivisor);
-    back_right.setPower((adjustedForward + adjustedStrafe - rotate) / wheelSpeedDivisor);
-
-    //front_left.setPower((forward + strafe + rotate) / wheelSpeedDivisor);
-    //front_right.setPower((forward - strafe - rotate) / wheelSpeedDivisor);
-    //back_left.setPower((forward - strafe + rotate) / wheelSpeedDivisor);
-    //back_right.setPower((forward + strafe - rotate) / wheelSpeedDivisor);
+    if (imuInit) {
+      front_left.setPower((adjustedForward + adjustedStrafe + rotate) / wheelSpeedDivisor);
+      front_right.setPower((adjustedForward - adjustedStrafe - rotate) / wheelSpeedDivisor);
+      back_left.setPower((adjustedForward - adjustedStrafe + rotate) / wheelSpeedDivisor);
+      back_right.setPower((adjustedForward + adjustedStrafe - rotate) / wheelSpeedDivisor);
+    }
+    else {
+      front_left.setPower((forward + strafe + rotate) / wheelSpeedDivisor);
+      front_right.setPower((forward - strafe - rotate) / wheelSpeedDivisor);
+      back_left.setPower((forward - strafe + rotate) / wheelSpeedDivisor);
+      back_right.setPower((forward + strafe - rotate) / wheelSpeedDivisor);
+    }
   }
 
   public void loop() {
+    if (gamepad1.touchpad){
+      imu.resetYaw();
+      imuInit = true;
+      gamepad1.rumble(1, 0, 676);
+    }
     moveRobot();
 
     //Extra Features, note that these are still in testing and probably include a bunch of bugs.
@@ -84,12 +92,12 @@ public class _2025Code1 extends OpMode {
       //Killswitch
       terminateOpModeNow();
     }
-    if (gamepad1.dpad_up && wheelSpeedDivisor == 2) {
+    if (gamepad1.dpad_up && wheelSpeedDivisor != 1) {
       gamepad1.setLedColor(0, 1, 0, 676);
       gamepad1.rumble(1, 0, 676);
       wheelSpeedDivisor = 1;
     }
-    if (gamepad1.dpad_down && wheelSpeedDivisor == 1) {
+    if (gamepad1.dpad_down && wheelSpeedDivisor != 2) {
       gamepad1.setLedColor(1, 0, 0, 676);
       gamepad1.rumble(1, 0, 676);
       wheelSpeedDivisor = 2;
