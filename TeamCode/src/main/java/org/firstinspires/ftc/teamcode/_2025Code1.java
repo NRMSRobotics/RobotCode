@@ -39,13 +39,6 @@ public class _2025Code1 extends OpMode {
   }
 
   public void runOpMode() {
-    boolean speedtoggle;
-    double WheelSpeedDivisor;
-    int mode;
-    int makeshiftpowervariable;
-    float vertical;
-    float horizontal;
-    float pivot;
     flywheel1 = hardwareMap.get(DcMotor.class, "flywheel1");
     flywheel2 = hardwareMap.get(DcMotor.class, "flywheel2");
 
@@ -57,7 +50,6 @@ public class _2025Code1 extends OpMode {
     speedtoggle = true;
     wheelSpeedDivisor = 1.15;
     mode = 0;
-    makeshiftpowervariable = 0;
     back_left.setDirection(DcMotor.Direction.REVERSE);
     front_left.setDirection(DcMotor.Direction.REVERSE);
   }
