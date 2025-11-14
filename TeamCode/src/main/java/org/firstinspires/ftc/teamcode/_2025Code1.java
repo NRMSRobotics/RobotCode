@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 @TeleOp(name = "_2025Code1")
-public class _2025Code1 extends LinearOpMode {
+public class _2025Code1 extends OpMode {
   private IMU imu;
   private DcMotor back_left;
   private DcMotor front_left;
@@ -18,13 +18,14 @@ public class _2025Code1 extends LinearOpMode {
   private DcMotor front_right;
   private DcMotor flywheel1;
   private DcMotor flywheel2;
-  
+
   boolean speedtoggle;
   double wheelSpeedDivisor;
   int mode;
   float vertical;
   float horizontal;
   float pivot;
+
   @Override
   public void init() {
     imu = hardwareMap.get(IMU.class, "imu");
@@ -35,7 +36,8 @@ public class _2025Code1 extends LinearOpMode {
 
     IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.FORWARD, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT));
     imu.initialize(parameters);
-    
+  }
+
   public void runOpMode() {
     boolean speedtoggle;
     double WheelSpeedDivisor;
@@ -59,6 +61,7 @@ public class _2025Code1 extends LinearOpMode {
     back_left.setDirection(DcMotor.Direction.REVERSE);
     front_left.setDirection(DcMotor.Direction.REVERSE);
   }
+
   public void moveRobot() {
     double forward = -gamepad1.right_stick_y;
     double strafe = -gamepad1.right_stick_x;
@@ -74,6 +77,7 @@ public class _2025Code1 extends LinearOpMode {
     back_left.setPower((adjustedForward - adjustedStrafe + rotate) / wheelSpeedDivisor);
     back_right.setPower((adjustedForward + adjustedStrafe - rotate) / wheelSpeedDivisor);
   }
+
   public void loop() {
     moveRobot();
 
@@ -91,7 +95,11 @@ public class _2025Code1 extends LinearOpMode {
       gamepad1.setLedColor(1, 0, 0, 676);
       gamepad1.rumble(1, 0, 676);
       wheelSpeedDivisor = 2;
-      
+
       flywheel1.setPower(gamepad1.right_trigger);
       flywheel2.setPower(gamepad1.right_trigger * -1);
+
+    }
+  }
+}
 
