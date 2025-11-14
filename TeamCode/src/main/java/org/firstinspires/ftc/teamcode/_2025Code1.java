@@ -1,28 +1,41 @@
 package org.firstinspires.ftc.teamcode;
-
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.CM;
+import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.MM;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
+import com.qualcomm.robotcore.hardware.IMU;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 @TeleOp(name = "_2025Code1")
 public class _2025Code1 extends LinearOpMode {
-
+  private IMU imu;
   private DcMotor back_left;
   private DcMotor front_left;
   private DcMotor back_right;
   private DcMotor front_right;
-
   private DcMotor flywheel1;
-
   private DcMotor flywheel2;
-
-  /**
-   * This sample contains the bare minimum Blocks for any regular OpMode. The 3 blue Comment
-   * Blocks show where to place Initialization code (runs once, after touching the DS INIT
-   * button, and before touching the DS Start arrow), Run code (runs once, after touching
-   * Start), and Loop code (runs repeatedly while the OpMode is active, namely not Stopped).
-   */
+  
+  boolean speedtoggle;
+  double wheelSpeedDivisor;
+  int mode;
+  float vertical;
+  float horizontal;
+  float pivot;
   @Override
+  public void init() {
+    imu = hardwareMap.get(IMU.class, "imu");
+    front_left = hardwareMap.get(DcMotor.class, "front_left");
+    front_right = hardwareMap.get(DcMotor.class, "front_right");
+    back_left = hardwareMap.get(DcMotor.class, "back_left");
+    back_right = hardwareMap.get(DcMotor.class, "back_right");
+
+    IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.FORWARD, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT));
+    imu.initialize(parameters);
+    
   public void runOpMode() {
     boolean speedtoggle;
     double WheelSpeedDivisor;
@@ -39,51 +52,46 @@ public class _2025Code1 extends LinearOpMode {
     back_right = hardwareMap.get(DcMotor.class, "back_right");
     front_right = hardwareMap.get(DcMotor.class, "front_right");
 
-    // INIT
     speedtoggle = true;
-    WheelSpeedDivisor = 1.15;
+    wheelSpeedDivisor = 1.15;
     mode = 0;
     makeshiftpowervariable = 0;
     back_left.setDirection(DcMotor.Direction.REVERSE);
     front_left.setDirection(DcMotor.Direction.REVERSE);
-    waitForStart();
-    if (opModeIsActive()) {
-      // WHILE LOOP (Main)
-      while (opModeIsActive()) {
-        // Detect if the mode isn't 1
-        if (mode == 0) {
-          // Lift and more setup
-          vertical = -gamepad1.right_stick_y;
-          horizontal = -gamepad1.right_stick_x;
-          pivot = -gamepad1.left_stick_x;
-          // Movement Handler
-          // Used to be -+,+-
-          back_left.setPower((-pivot + vertical + horizontal) / WheelSpeedDivisor);
-          back_right.setPower((pivot + (vertical - horizontal)) / WheelSpeedDivisor);
-          front_left.setPower((-pivot + (vertical - horizontal)) / WheelSpeedDivisor);
-          front_right.setPower((pivot + vertical + horizontal) / WheelSpeedDivisor);
-          // Extra Features, note that these are still in testing and probably include a bunch of bugs.
-          if (gamepad1.x && gamepad1.y) {
-            // Killswitch
-            terminateOpModeNow();
-          }
-          if (gamepad1.dpad_up) {
-            gamepad1.setLedColor(0, 1, 0, 676);
-            gamepad1.rumble(1, 0, 676);
-            WheelSpeedDivisor = 1;
-          }
-          if (gamepad1.dpad_down) {
-            gamepad1.setLedColor(1, 0, 0, 676);
-            gamepad1.rumble(1, 0, 676);
-            WheelSpeedDivisor = 2;
-          }
-
-          flywheel1.setPower(gamepad1.right_trigger);
-          flywheel2.setPower(gamepad1.right_trigger * -1);
-
-          telemetry.update();
-        }
-      }
-    }
   }
-}
+  public void moveRobot() {
+    double forward = -gamepad1.right_stick_y;
+    double strafe = -gamepad1.right_stick_x;
+    double rotate = gamepad1.left_stick_x;
+
+    double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+
+    double adjustedForward = -forward * Math.sin(heading) + strafe * Math.cos(heading);
+    double adjustedStrafe = forward * Math.cos(heading) + strafe * Math.sin(heading);
+
+    front_left.setPower((adjustedForward + adjustedStrafe + rotate) / wheelSpeedDivisor);
+    front_right.setPower((adjustedForward - adjustedStrafe - rotate) / wheelSpeedDivisor);
+    back_left.setPower((adjustedForward - adjustedStrafe + rotate) / wheelSpeedDivisor);
+    back_right.setPower((adjustedForward + adjustedStrafe - rotate) / wheelSpeedDivisor);
+  }
+  public void loop() {
+    moveRobot();
+
+    //Extra Features, note that these are still in testing and probably include a bunch of bugs.
+    if (gamepad1.x && gamepad1.y) {
+      //Killswitch
+      terminateOpModeNow();
+    }
+    if (gamepad1.dpad_up && wheelSpeedDivisor == 2) {
+      gamepad1.setLedColor(0, 1, 0, 676);
+      gamepad1.rumble(1, 0, 676);
+      wheelSpeedDivisor = 1;
+    }
+    if (gamepad1.dpad_down && wheelSpeedDivisor == 1) {
+      gamepad1.setLedColor(1, 0, 0, 676);
+      gamepad1.rumble(1, 0, 676);
+      wheelSpeedDivisor = 2;
+      
+      flywheel1.setPower(gamepad1.right_trigger);
+      flywheel2.setPower(gamepad1.right_trigger * -1);
+
