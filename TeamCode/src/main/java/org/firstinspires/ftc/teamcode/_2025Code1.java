@@ -86,12 +86,12 @@ public class _2025Code1 extends OpMode {
       //Killswitch
       terminateOpModeNow();
     }
-    if (gamepad1.dpad_up && wheelSpeedDivisor == 2) {
+    if (gamepad1.dpad_up && wheelSpeedDivisor != 1) {
       gamepad1.setLedColor(0, 1, 0, 676);
       gamepad1.rumble(1, 0, 676);
       wheelSpeedDivisor = 1;
     }
-    if (gamepad1.dpad_down && wheelSpeedDivisor == 1) {
+    if (gamepad1.dpad_down && wheelSpeedDivisor != 1) {
       gamepad1.setLedColor(1, 0, 0, 676);
       gamepad1.rumble(1, 0, 676);
       wheelSpeedDivisor = 2;
