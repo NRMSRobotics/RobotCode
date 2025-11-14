@@ -13,10 +13,9 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
-@TeleOp(name = "_2025Code1")
+@TeleOp(name = "_2025Code1test")
 public class _2025Code1 extends OpMode {
-  public IMU imu;
-  GoBildaPinpointDriver odo;
+  private IMU imu;
   DcMotor back_left;
   DcMotor front_left;
   DcMotor back_right;
@@ -30,12 +29,11 @@ public class _2025Code1 extends OpMode {
 
   @Override
   public void init() {
-    IMU imu = hardwareMap.get(IMU.class, "imu");
+    imu = hardwareMap.get(IMU.class, "imu");
     front_left = hardwareMap.get(DcMotor.class, "front_left");
     front_right = hardwareMap.get(DcMotor.class, "front_right");
     back_left = hardwareMap.get(DcMotor.class, "back_left");
     back_right = hardwareMap.get(DcMotor.class, "back_right");
-    odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
 
     IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.FORWARD, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT));
     imu.initialize(parameters);
@@ -48,10 +46,10 @@ public class _2025Code1 extends OpMode {
   }
   public void moveRobot() {
     double forward = -gamepad1.right_stick_y;
-    double strafe = gamepad1.right_stick_x;
+    double strafe = -gamepad1.right_stick_x;
     double rotate = gamepad1.left_stick_x;
 
-    double heading = -imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+    double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
     double adjustedForward = -forward * Math.sin(heading) + strafe * Math.cos(heading);
     double adjustedStrafe = forward * Math.cos(heading) + strafe * Math.sin(heading);
@@ -64,7 +62,6 @@ public class _2025Code1 extends OpMode {
   public void loop() {
     moveRobot();
 
-    Pose2D pos = odo.getPosition();
     //Extra Features, note that these are still in testing and probably include a bunch of bugs.
     if (gamepad1.x && gamepad1.y) {
       //Killswitch
