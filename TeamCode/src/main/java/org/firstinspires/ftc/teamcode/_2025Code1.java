@@ -22,9 +22,6 @@ public class _2025Code1 extends OpMode {
   boolean speedtoggle;
   double wheelSpeedDivisor;
   int mode;
-  float vertical;
-  float horizontal;
-  float pivot;
 
   @Override
   public void init() {
