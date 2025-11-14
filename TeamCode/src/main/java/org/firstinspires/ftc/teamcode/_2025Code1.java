@@ -1,32 +1,30 @@
 package org.firstinspires.ftc.teamcode;
-
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.CM;
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.MM;
-
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-
-@TeleOp(name = "_2025Code1test")
-public class _2025Code1 extends OpMode {
+@TeleOp(name = "_2025Code1")
+public class _2025Code1 extends LinearOpMode {
   private IMU imu;
-  DcMotor back_left;
-  DcMotor front_left;
-  DcMotor back_right;
-  DcMotor front_right;
+  private DcMotor back_left;
+  private DcMotor front_left;
+  private DcMotor back_right;
+  private DcMotor front_right;
+  private DcMotor flywheel1;
+  private DcMotor flywheel2;
+  
   boolean speedtoggle;
   double wheelSpeedDivisor;
   int mode;
   float vertical;
   float horizontal;
   float pivot;
-
   @Override
   public void init() {
     imu = hardwareMap.get(IMU.class, "imu");
@@ -37,10 +35,27 @@ public class _2025Code1 extends OpMode {
 
     IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.FORWARD, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT));
     imu.initialize(parameters);
+    
+  public void runOpMode() {
+    boolean speedtoggle;
+    double WheelSpeedDivisor;
+    int mode;
+    int makeshiftpowervariable;
+    float vertical;
+    float horizontal;
+    float pivot;
+    flywheel1 = hardwareMap.get(DcMotor.class, "flywheel1");
+    flywheel2 = hardwareMap.get(DcMotor.class, "flywheel2");
+
+    back_left = hardwareMap.get(DcMotor.class, "back_left");
+    front_left = hardwareMap.get(DcMotor.class, "front_left");
+    back_right = hardwareMap.get(DcMotor.class, "back_right");
+    front_right = hardwareMap.get(DcMotor.class, "front_right");
 
     speedtoggle = true;
     wheelSpeedDivisor = 1.15;
     mode = 0;
+    makeshiftpowervariable = 0;
     back_left.setDirection(DcMotor.Direction.REVERSE);
     front_left.setDirection(DcMotor.Direction.REVERSE);
   }
@@ -76,7 +91,7 @@ public class _2025Code1 extends OpMode {
       gamepad1.setLedColor(1, 0, 0, 676);
       gamepad1.rumble(1, 0, 676);
       wheelSpeedDivisor = 2;
-    }
-    telemetry.update();
-  }
-}
+      
+      flywheel1.setPower(gamepad1.right_trigger);
+      flywheel2.setPower(gamepad1.right_trigger * -1);
+
