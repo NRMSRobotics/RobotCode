@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 @TeleOp(name = "_2025Code1")
-public class _2025Code1 extends OpMode {
+public class _25628Code extends OpMode {
   private IMU imu;
   private DcMotor back_left;
   private DcMotor front_left;
