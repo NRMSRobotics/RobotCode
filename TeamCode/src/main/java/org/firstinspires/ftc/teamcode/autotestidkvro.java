@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+
+import java.util.List;
 
 @Autonomous(name = "autotestidkvro (Blocks to Java)")
 public class autotestidkvro extends LinearOpMode {
@@ -26,8 +29,13 @@ public class autotestidkvro extends LinearOpMode {
   @Override
   public void runOpMode() {
     int pos_x;
+    double botX;
+    double botY;
+    double botZ;
+    double strafeThat;
     LLResult llight_result;
     Pose3D botpose;
+
 
     LimeLightLemonade = hardwareMap.get(Limelight3A.class, "LimeLight Lemonade");
     front_left = hardwareMap.get(DcMotor.class, "front_left");
@@ -38,6 +46,7 @@ public class autotestidkvro extends LinearOpMode {
     pos_x = 0;
     LimeLightLemonade.pipelineSwitch(0);
     LimeLightLemonade.start();
+    LimeLightLemonade.setPollRateHz(100);
     waitForStart();
     if (opModeIsActive()) {
       front_left.setDirection(DcMotor.Direction.REVERSE);
@@ -48,22 +57,46 @@ public class autotestidkvro extends LinearOpMode {
         llight_result = LimeLightLemonade.getLatestResult();
         if (llight_result.isValid()) {
           telemetry.addData("LLResult is valid", 1);
+
           botpose = llight_result.getBotpose();
+
+//          List<LLResultTypes.FiducialResult> fiducal = llight_result.getFiducialResults();
+//
+//          for (LLResultTypes.FiducialResult fiducal : fiducals)
+
           telemetry.addData("tx", llight_result.getTx());
           telemetry.addData("ty", llight_result.getTy());
           telemetry.addData("botpose", botpose.toString());
-          // Note to self: Set to ~= 0, <= -5 works sometimes based on where you place the robot, but values will never be consistent.
-          if (llight_result.getTx() <= -5) {
-            front_left.setPower(0);
-            back_left.setPower(0);
-            front_right.setPower(0);
-            back_right.setPower(0);
-          } else {
-            back_left.setPower(0.1);
-            front_left.setPower(0.1);
-            back_right.setPower(-0.1);
-            front_right.setPower(-0.1);
+
+          if (botpose != null){
+            botX = botpose.getPosition().x;
+            botY = botpose.getPosition().y;
+            botZ = botpose.getPosition().z;
+
+            telemetry.addData("BotPosePositionX", botX);
+            telemetry.addData("BotPosePositionY", botY);
+            telemetry.addData("BotPosePositionZ", botZ);
+
+            strafeThat = llight_result.getTx() * 0.03;
+
+            back_left.setPower(strafeThat);
+            front_left.setPower(strafeThat);
+           back_right.setPower(-strafeThat);
+           front_right.setPower(-strafeThat);
           }
+
+          // Note to self: Set to ~= 0, <= -5 works sometimes based on where you place the robot, but values will never be consistent.
+//          if (llight_result.getTx() != 0) {
+//            front_left.setPower(0);
+//            back_left.setPower(0);
+//            front_right.setPower(0);
+//            back_right.setPower(0);
+//          } else {
+//            back_left.setPower(0.1);
+//            front_left.setPower(0.1);
+//            back_right.setPower(-0.1);
+//            front_right.setPower(-0.1);
+//          }
         } else {
           telemetry.addData("Error: LLResult not IsValid", 1);
         }

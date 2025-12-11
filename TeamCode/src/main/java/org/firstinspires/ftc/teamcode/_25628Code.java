@@ -19,6 +19,8 @@ public class _25628Code extends OpMode {
   private DcMotor flywheel1;
   private DcMotor flywheel2;
 
+  private DcMotor intake;
+
   boolean imuInit;
   double wheelSpeedDivisor;
   int mode;
@@ -92,6 +94,12 @@ public class _25628Code extends OpMode {
       //Killswitch
       terminateOpModeNow();
     }
+    if (gamepad1.left_bumper) {
+      intake.setPower(1);
+    } else {
+      intake.setPower(0);
+    }
+    
     if (gamepad1.dpad_up && wheelSpeedDivisor != 1) {
       gamepad1.setLedColor(0, 1, 0, 676);
       gamepad1.rumble(1, 0, 676);
