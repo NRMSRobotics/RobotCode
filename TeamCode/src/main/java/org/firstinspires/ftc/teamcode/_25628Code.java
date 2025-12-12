@@ -8,6 +8,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 @TeleOp(name = "_2025Code1")
 public class _25628Code extends OpMode {
@@ -18,6 +24,8 @@ public class _25628Code extends OpMode {
   private DcMotor front_right;
   private DcMotor flywheel1;
   private DcMotor flywheel2;
+
+  AnalogInput ranger;
 
   boolean imuInit;
   double wheelSpeedDivisor;
@@ -80,6 +88,20 @@ public class _25628Code extends OpMode {
   }
 
   public void loop() {
+    ranger = hardwareMap.get(AnalogInput.class, "ranger");
+
+
+    // get a reference to our Light Sensor object.
+    // wait for the start button to be pressed.
+
+
+    // while the op mode is active, loop and read the light levels.
+    // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
+
+
+      // send the info back to driver station using telemetry function.
+
+
     if (gamepad1.touchpad){
       imu.resetYaw();
       imuInit = true;
@@ -106,6 +128,13 @@ public class _25628Code extends OpMode {
       flywheel2.setPower(gamepad1.right_trigger * -1);
 
     }
+
+    telemetry.addData("Raw Voltage",    ranger.getVoltage());
+    //telemetry.addData("Inch 15DEG 0-1 Mode: ", (ranger.getVoltage()*32.5)-2.6);
+    telemetry.addData("Inch 20DEG 0-0 Mode: ", (ranger.getVoltage()*48.7)-4.9);
+    //telemetry.addData("Inch 27DEG 1-0 Mode: ", (ranger.getVoltage()*78.1)-10.2);
+
+    telemetry.update();
   }
 }
 
