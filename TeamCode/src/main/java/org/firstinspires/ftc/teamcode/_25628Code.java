@@ -1,14 +1,10 @@
 package org.firstinspires.ftc.teamcode;
-import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.CM;
-import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.MM;
-import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 @TeleOp(name = "_2025Code1")
 public class _25628Code extends OpMode {
   private IMU imu;
@@ -18,13 +14,11 @@ public class _25628Code extends OpMode {
   private DcMotor front_right;
   private DcMotor flywheel1;
   private DcMotor flywheel2;
+  private DcMotor intake;
 
   boolean imuInit;
   double wheelSpeedDivisor;
   int mode;
-  float vertical;
-  float horizontal;
-  float pivot;
 
   @Override
   public void init() {
@@ -44,6 +38,7 @@ public class _25628Code extends OpMode {
     front_left = hardwareMap.get(DcMotor.class, "front_left");
     back_right = hardwareMap.get(DcMotor.class, "back_right");
     front_right = hardwareMap.get(DcMotor.class, "front_right");
+    intake = hardwareMap.get(DcMotor.class, "intake");
 
     imuInit = false;
     wheelSpeedDivisor = 1.15;
@@ -91,6 +86,11 @@ public class _25628Code extends OpMode {
     if (gamepad1.x && gamepad1.y) {
       //Killswitch
       terminateOpModeNow();
+    }
+    if (gamepad1.left_bumper) {
+      intake.setPower(1);
+    } else {
+      intake.setPower(0);
     }
     if (gamepad1.dpad_up && wheelSpeedDivisor != 1) {
       gamepad1.setLedColor(0, 1, 0, 676);
