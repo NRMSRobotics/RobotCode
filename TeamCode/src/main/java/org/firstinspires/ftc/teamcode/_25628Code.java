@@ -18,6 +18,7 @@ public class _25628Code extends OpMode {
   private DcMotor front_right;
   private DcMotor flywheel1;
   private DcMotor flywheel2;
+  double flyWheelSpeed  = 0.75;
 
   boolean imuInit;
   double wheelSpeedDivisor;
@@ -80,7 +81,7 @@ public class _25628Code extends OpMode {
   }
 
   public void loop() {
-    if (gamepad1.touchpad){
+    if (gamepad1.touchpad) {
       imu.resetYaw();
       imuInit = true;
       gamepad1.rumble(1, 0, 676);
@@ -102,10 +103,24 @@ public class _25628Code extends OpMode {
       gamepad1.rumble(1, 0, 676);
       wheelSpeedDivisor = 2;
 
-      flywheel1.setPower(gamepad1.right_trigger);
-      flywheel2.setPower(gamepad1.right_trigger * -1);
 
     }
+
+    if (gamepad1.right_trigger > 0.75) {
+      flywheel1.setPower(flyWheelSpeed);
+
+    } else {
+      flywheel1.setPower(0);
+    }
+
+    if (gamepad1.aWasPressed() & flyWheelSpeed < 1) {
+      flyWheelSpeed += 0.1;
+    }
+
+    if (gamepad1.bWasPressed() & flyWheelSpeed > 0) {
+      flyWheelSpeed -= 0.1;
+    }
+
   }
 }
 
