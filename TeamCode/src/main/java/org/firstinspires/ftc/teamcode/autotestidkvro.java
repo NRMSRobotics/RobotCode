@@ -4,6 +4,7 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
@@ -15,6 +16,7 @@ public class autotestidkvro extends LinearOpMode {
   private DcMotor back_left;
   private DcMotor front_right;
   private DcMotor back_right;
+  AnalogInput ranger;
 
   /**
    * This sample contains the bare minimum Blocks for any regular OpMode. The 3 blue
@@ -45,6 +47,10 @@ public class autotestidkvro extends LinearOpMode {
       moveForwardFor(0.1, 10);
       sleep(300);
       while (opModeIsActive()) {
+        telemetry.addData("Raw Voltage",    ranger.getVoltage());
+        //telemetry.addData("Inch 15DEG 0-1 Mode: ", (ranger.getVoltage()*32.5)-2.6);
+        telemetry.addData("Inch 20DEG 0-0 Mode: ", (ranger.getVoltage()*48.7)-4.9);
+        //telemetry.addData("Inch 27DEG 1-0 Mode: ", (ranger.getVoltage()*78.1)-10.2);
         llight_result = LimeLightLemonade.getLatestResult();
         if (llight_result.isValid()) {
           telemetry.addData("LLResult is valid", 1);
