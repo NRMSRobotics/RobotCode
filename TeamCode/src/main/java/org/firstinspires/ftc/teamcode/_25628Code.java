@@ -14,7 +14,8 @@ public class _25628Code extends OpMode {
   private DcMotor front_right;
   private DcMotor flywheel1;
   private DcMotor flywheel2;
-  private DcMotor intake;
+  private DcMotor intake1;
+  private DcMotor intake2;
 
   boolean imuInit;
   double wheelSpeedDivisor;
@@ -38,7 +39,9 @@ public class _25628Code extends OpMode {
     front_left = hardwareMap.get(DcMotor.class, "front_left");
     back_right = hardwareMap.get(DcMotor.class, "back_right");
     front_right = hardwareMap.get(DcMotor.class, "front_right");
-    intake = hardwareMap.get(DcMotor.class, "intake");
+
+    intake1 = hardwareMap.get(DcMotor.class, "intake1");
+    intake2 = hardwareMap.get(DcMotor.class, "intake2");
 
     imuInit = false;
     wheelSpeedDivisor = 1.15;
@@ -88,9 +91,11 @@ public class _25628Code extends OpMode {
       terminateOpModeNow();
     }
     if (gamepad1.left_bumper) {
-      intake.setPower(1);
+      intake1.setPower(1);
+      intake2.setPower(1);
     } else {
-      intake.setPower(0);
+      intake1.setPower(0);
+      intake2.setPower(0);
     }
     if (gamepad1.dpad_up && wheelSpeedDivisor != 1) {
       gamepad1.setLedColor(0, 1, 0, 676);
