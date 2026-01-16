@@ -19,6 +19,12 @@ public class _25628Code extends OpMode {
   private DcMotor flywheel1;
   private DcMotor flywheel2;
 
+  private DcMotor contrivance1;
+
+  private DcMotor contrivance2;
+
+  private DcMotor contrivance3;
+
   boolean imuInit;
   double wheelSpeedDivisor;
   int mode;
@@ -40,6 +46,10 @@ public class _25628Code extends OpMode {
     flywheel1 = hardwareMap.get(DcMotor.class, "flywheel1");
     flywheel2 = hardwareMap.get(DcMotor.class, "flywheel2");
 
+    contrivance1 = hardwareMap.get(DcMotor.class, "motor1");
+    contrivance2 = hardwareMap.get(DcMotor.class, "motor2");
+    contrivance3 = hardwareMap.get(DcMotor.class, "motor3");
+
     back_left = hardwareMap.get(DcMotor.class, "back_left");
     front_left = hardwareMap.get(DcMotor.class, "front_left");
     back_right = hardwareMap.get(DcMotor.class, "back_right");
@@ -53,9 +63,29 @@ public class _25628Code extends OpMode {
   }
 
   public void moveRobot() {
+    // gamepad2 works the same as gamepad 1, [may throw errors if not connected to robot?]
+
     double forward = -gamepad1.right_stick_y;
     double strafe = gamepad1.right_stick_x;
     double rotate = gamepad1.left_stick_x;
+
+    // Dear program seeker,
+    // This program was created by Franklin wade; and for one purpose.
+    // To move the mysterious "Three Motors".
+    // The objectives and morals of these "Motors" (or contrivances), are currently unknown,
+    // However, you may change the way you control them under these few lines, starting at
+    // 'double contrivance1power'
+    // I am using the second gamepad controller for this task.
+    // Thank you, program seeker. Good luck with your perilous journey.
+    // This message was brought to you by FremLank 5G Wireless, with Gold Plated connectors (AI Powered)
+    // pls don't kill me henry im sory
+    // I am so damn tired - Franklin (8:45-8:46 AM at Friday, January 16, 2026)
+    // hey robot inspectors, inspect this comment, will you? i bet you can't looool
+
+    double contrivance1power = gamepad2.right_trigger;
+    double contrivance2power = gamepad2.left_trigger;
+    double contrivance3power = gamepad2.left_stick_y;
+
     telemetry.addData("Forward", forward);
     telemetry.addData("Strafe", strafe);
     telemetry.addData("Rotate", rotate);
@@ -77,6 +107,20 @@ public class _25628Code extends OpMode {
       back_left.setPower((forward - strafe + rotate) / wheelSpeedDivisor);
       back_right.setPower((forward + strafe - rotate) / wheelSpeedDivisor);
     }
+
+    // franklin's code
+
+    contrivance1.setPower(contrivance1power);
+    contrivance2.setPower(contrivance2power);
+    contrivance3.setPower(contrivance3power);
+
+    // is that seriously ALL i need to do
+
+    // that was literally 9 lines of code bro
+
+    // are we serious rn 😔
+
+
   }
 
   public void loop() {
@@ -102,9 +146,8 @@ public class _25628Code extends OpMode {
       gamepad1.rumble(1, 0, 676);
       wheelSpeedDivisor = 2;
 
-      flywheel1.setPower(gamepad1.right_trigger);
-      flywheel2.setPower(gamepad1.right_trigger * -1);
-
+      //flywheel1.setPower(gamepad1.right_trigger);
+      //flywheel2.setPower(gamepad1.right_trigger * -1);
     }
   }
 }
