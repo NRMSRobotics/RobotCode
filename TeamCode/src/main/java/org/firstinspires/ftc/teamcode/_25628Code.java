@@ -9,6 +9,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+
+// Robot Half Recode
+
+// Half Recoding the robot
+
+// half recoding the robot
+
+// The robot will be half recoded
 @TeleOp(name = "_2025Code1")
 public class _25628Code extends OpMode {
   private IMU imu;
@@ -16,6 +24,9 @@ public class _25628Code extends OpMode {
   private DcMotor front_left;
   private DcMotor back_right;
   private DcMotor front_right;
+
+  private DcMotor intake1;
+  private DcMotor intake2;
   private DcMotor flywheel1;
   private DcMotor flywheel2;
 
@@ -39,6 +50,9 @@ public class _25628Code extends OpMode {
 
     flywheel1 = hardwareMap.get(DcMotor.class, "flywheel1");
     flywheel2 = hardwareMap.get(DcMotor.class, "flywheel2");
+
+    intake1 = hardwareMap.get(DcMotor.class, "intake1");
+    intake2 = hardwareMap.get(DcMotor.class, "intake2");
 
     back_left = hardwareMap.get(DcMotor.class, "back_left");
     front_left = hardwareMap.get(DcMotor.class, "front_left");
@@ -102,8 +116,20 @@ public class _25628Code extends OpMode {
       gamepad1.rumble(1, 0, 676);
       wheelSpeedDivisor = 2;
 
-      flywheel1.setPower(gamepad1.right_trigger);
-      flywheel2.setPower(gamepad1.right_trigger * -1);
+      flywheel1.setPower(gamepad2.right_trigger);
+      flywheel2.setPower(gamepad2.right_trigger * -1);
+
+      if (gamepad2.right_bumper){
+
+        intake1.setPower(1);
+        intake2.setPower(1);
+
+      } else if (gamepad2.left_bumper) {
+
+        intake1.setPower(-1);
+        intake2.setPower(-1);
+
+      }
 
     }
   }
